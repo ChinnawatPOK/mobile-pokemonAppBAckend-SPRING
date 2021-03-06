@@ -1,5 +1,6 @@
 package com.example.pokemon.Controller;
 
+import com.example.pokemon.model.LoginReqDto;
 import com.example.pokemon.model.User;
 import com.example.pokemon.service.PokemonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class ApiController {
     }
 
     @PostMapping("/api/login")
-    public ResponseEntity<?> login(@RequestBody User user){
+    public ResponseEntity<?> login(@RequestBody LoginReqDto user){
         return pokemonService.login(user);
     }
     @GetMapping("/api/getPokemonById")

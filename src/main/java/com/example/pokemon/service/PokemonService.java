@@ -1,5 +1,6 @@
 package com.example.pokemon.service;
 
+import com.example.pokemon.model.LoginReqDto;
 import com.example.pokemon.model.Transaction;
 import com.example.pokemon.model.User;
 import com.example.pokemon.model.UserPokemon;
@@ -35,9 +36,9 @@ public class PokemonService {
             return new ResponseEntity<String>("Username already exists", HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity<?> login(User user){
+    public ResponseEntity<?> login(LoginReqDto user){
         if(userRepository.findByUsernameAndPassword(user.getUsername(),user.getPassword()).isPresent())
-            return ResponseEntity.ok(userRepository.findById(user.getUserId()).get());
+            return ResponseEntity.ok(userRepository.findByUsernameAndPassword(user.getUsername(),user.getPassword()).get());
         else return new ResponseEntity<String>("Username or password incorrect",HttpStatus.BAD_REQUEST);
     }
     public ResponseEntity<?> getPokemonById(Integer userId){
