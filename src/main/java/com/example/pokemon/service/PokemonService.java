@@ -29,9 +29,13 @@ public class PokemonService {
         this.transactionRepository = transactionRepository;
     }
 
-    public ResponseEntity<?> register(User user){
-        if(!userRepository.existsByUsername(user.getUsername()))
-            return ResponseEntity.ok(userRepository.save(user));
+    public ResponseEntity<?> register(LoginReqDto user){
+        if(!userRepository.existsByUsername(user.getUsername())){
+            User userRes =new User();
+            userRes.setUsername(user.getUsername());
+            userRes.setPassword(user.getPassword());
+            return ResponseEntity.ok(userRepository.save(userRes));
+        }
         else
             return new ResponseEntity<String>("Username already exists", HttpStatus.BAD_REQUEST);
     }
@@ -46,14 +50,15 @@ public class PokemonService {
         // Not have return []
         return ResponseEntity.ok(pokemonList);
     }
-    public ResponseEntity<?> checkRandomPerDays(Integer userId,String pokeName){
+    public ResponseEntity<?> checkRandomPerDays(Integer userId,String pokeName,Integer pokeId){
         User user = userRepository.findById(userId).get();
         // check per day grater 2 times
-        if(transactionRepository.findByDate(LocalDate.now()).size() < 2) {
+        if(transactionRepository.findByDateAndUser_UserId(LocalDate.now(),userId).size() < 2) {
             // save to userPokemon
             UserPokemon userPokemon = new UserPokemon();
             userPokemon.setUser(user);
             userPokemon.setPokemonName(pokeName);
+            userPokemon.setPokemonId(pokeId);
             userPokemonRepository.save(userPokemon);
             // save to transaction
             Transaction transaction = new Transaction();
@@ -65,4 +70,9 @@ public class PokemonService {
             return new ResponseEntity<String>("You random greater 2 times. ",HttpStatus.BAD_REQUEST);
         }
     }
-}
+    public ResponseEntity<?> getCountPerDay(Integer userId){
+        List<Transaction> transactionList = transactionRepository.findByDateAndUser_UserId(LocalDate.now(),userId);
+        if(transactionList.isEmpty()) return new ResponseEntity<Integer>(0,HttpStatus.OK);
+        return new ResponseEntity<Integer>(transactionList.size(),HttpStatus.OK);
+    }
+ }

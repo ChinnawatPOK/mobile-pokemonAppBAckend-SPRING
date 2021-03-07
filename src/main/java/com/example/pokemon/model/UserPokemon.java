@@ -16,5 +16,8 @@ public class UserPokemon  extends  BaseEntity{
     @Column(name = "pokemon_name")
     private String pokemonName;
 
+    @Column(name =  "pokemon_id")
+    private Integer pokemonId;
+
 
 }

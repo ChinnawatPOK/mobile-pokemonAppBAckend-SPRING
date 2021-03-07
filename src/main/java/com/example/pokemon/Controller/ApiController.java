@@ -15,7 +15,7 @@ public class ApiController {
     PokemonService pokemonService;
 
     @PostMapping("/api/register")
-    public ResponseEntity<?> register(@RequestBody User user){
+    public ResponseEntity<?> register(@RequestBody LoginReqDto user){
         return pokemonService.register(user);
     }
 
@@ -27,9 +27,13 @@ public class ApiController {
     public ResponseEntity<?> getPokemonById(@RequestParam Integer userId){
         return pokemonService.getPokemonById(userId);
     }
-    @PostMapping("/api/checkRandomPerDays")
-    public ResponseEntity<?> checkRandomPerDays(@RequestParam Integer userId,@RequestParam String pokeName){
-        return pokemonService.checkRandomPerDays(userId,pokeName);
+    @GetMapping("/api/checkRandomPerDays")
+    public ResponseEntity<?> checkRandomPerDays(@RequestParam Integer userId,@RequestParam String pokeName,@RequestParam Integer pokeId){
+        return pokemonService.checkRandomPerDays(userId,pokeName,pokeId);
+    }
+    @GetMapping("/api/getCountPerDay")
+    public ResponseEntity<?> getCountPerDay(@RequestParam String userId){
+        return pokemonService.getCountPerDay(Integer.parseInt(userId));
     }
 
 }
