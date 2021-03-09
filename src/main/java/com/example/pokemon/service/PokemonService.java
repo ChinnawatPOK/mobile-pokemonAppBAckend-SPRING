@@ -41,6 +41,7 @@ public class PokemonService {
     }
 
     public ResponseEntity<?> login(LoginReqDto user){
+        // Normally Login but should JWT Token authentication like another project
         if(userRepository.findByUsernameAndPassword(user.getUsername(),user.getPassword()).isPresent())
             return ResponseEntity.ok(userRepository.findByUsernameAndPassword(user.getUsername(),user.getPassword()).get());
         else return new ResponseEntity<String>("Username or password incorrect",HttpStatus.BAD_REQUEST);
